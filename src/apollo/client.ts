@@ -6,7 +6,7 @@ import fetch from 'node-fetch'
 export default new ApolloClient({
   link: new HttpLink({
     fetch,
-    uri: 'https://subgraph.hyperswap.fi/subgraphs/name/theothug/swap-subgraph'
+    uri: 'https://api.thegraph.com/subgraphs/name/angry-mech/hyperjump-bsc-main'
   }),
   cache: new InMemoryCache()
 })
