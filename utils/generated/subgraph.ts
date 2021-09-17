@@ -664,14 +664,14 @@ export type TokenQuery = { readonly __typename?: "Query" } & {
   readonly token?: Maybe<
     { readonly __typename?: "Token" } & Pick<
       Token,
-      "id" | "name" | "symbol" | "derivedBNB" | "derivedUSD"
+      "id" | "name" | "symbol" | "derivedBNB"
     >
   >;
 };
 
 export type TokenInfoFragment = { readonly __typename?: "Token" } & Pick<
   Token,
-  "id" | "name" | "symbol" | "derivedBNB" | "derivedUSD"
+  "id" | "name" | "symbol" | "derivedBNB"
 >;
 
 export type TopPairsQueryVariables = Exact<{
