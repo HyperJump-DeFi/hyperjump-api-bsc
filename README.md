@@ -52,7 +52,7 @@ The canonical WBNB address used by the PancakeSwap interface is `0xbb4CdB9CBd36B
 
 Results are cached for 5 minutes (or 300 seconds).
 
-## [`/v2/summary`](https://bsc-api.hyperjump.app/api/summary)
+## [`/summary`](https://bsc-api.hyperjump.app/api/summary)
 
 Returns data for the top ~1000 PancakeSwap pairs, sorted by reserves.
 
@@ -79,7 +79,7 @@ Returns data for the top ~1000 PancakeSwap pairs, sorted by reserves.
 }
 ```
 
-## [`/v2/tokens`](https://bsc-api.hyperjump.app/api/tokens)
+## [`/tokens`](https://bsc-api.hyperjump.app/api/tokens)
 
 Returns the tokens in the top ~1000 pairs on PancakeSwap, sorted by reserves.
 
@@ -105,7 +105,7 @@ Returns the tokens in the top ~1000 pairs on PancakeSwap, sorted by reserves.
 }
 ```
 
-## [`/v2/tokens/0x...`](https://bsc-api.hyperjump.app/api/tokens/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82)
+## [`/tokens/0x...`](https://bsc-api.hyperjump.app/api/tokens/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82)
 
 Returns the token information, based on address.
 
@@ -127,7 +127,7 @@ Returns the token information, based on address.
 }
 ```
 
-## [`/v2/pairs`](https://bsc-api.hyperjump.app/api/pairs)
+## [`/pairs`](https://bsc-api.hyperjump.app/api/pairs)
 
 Returns data for the top ~1000 PancakeSwap pairs, sorted by reserves.
 
