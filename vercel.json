@@ -1,23 +1,45 @@
 {
-  "name": "hyperjump-bsc-api",
-  "version": 2,
-  "alias": "bsc-api.hyperjump.app",
-  "builds": [{ "src": "src/**/*.ts", "use": "@now/node" }],
-  "routes": [
-    { "src": "/totalliquidity", "dest": "/src/totalliquidity.ts", "methods": ["GET"] },
-    { "src": "/summary", "dest": "/src/summary.ts", "methods": ["GET"] },
-    { "src": "/assets", "dest": "/src/assets.ts", "methods": ["GET"] },
-    { "src": "/tickers", "dest": "/src/tickers.ts", "methods": ["GET"] },
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
     {
-      "src": "/orderbook/(?<pair>.*)",
-      "dest": "/src/orderbook.ts?pair=$pair",
-      "methods": ["GET"]
+      "source": "/api/tokens",
+      "destination": "/api/tokens"
     },
     {
-      "src": "/trades/(?<pair>.*)",
-      "dest": "/src/trades.ts?pair=$pair",
-      "methods": ["GET"]
-    },
-    {"src": "/.*", "dest": "/src/404.ts"}
+      "source": "/api/tokens/:address",
+      "destination": "/api/tokens/tokens"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, HEAD, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Accept, Content-Type, Origin"
+        },
+        {
+          "key": "Access-Control-Max-Age",
+          "value": "86400"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, s-maxage=60"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        }
+      ]
+    }
   ]
 }

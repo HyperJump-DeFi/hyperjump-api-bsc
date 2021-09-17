@@ -1,182 +1,54 @@
-# Streetswap API
+# Hyperjump API
 
-The Streetswap API is a set of endpoints used by market aggregators (e.g. coinmarketcap.com) to surface Thugswap liquidity
+Adapted from Pancake API
+-------------------------
+
+The PancakeSwap API is a set of endpoints used by market aggregators (e.g. coinmarketcap.com) to surface PancakeSwap liquidity
 and volume information. All information is fetched from the underlying subgraphs.
 
-The API is designed around the CoinMarketCap
-[requirements document](https://docs.google.com/document/d/1S4urpzUnO2t7DmS_1dc4EL4tgnnbTObPYXvDeBnukCg).
+## v1 Documentation
 
-Prefer the Thugswap subgraph for any Thugswap queries whenever possible.
+The documentation of the endpoints, for PancakeSwap v1, can be found [here](v1-documentation.md).
 
-Thugswap Subgraph: https://github.com/thugswap/thugswap-subgraph
+## v2 Documentation
 
-# Thugswap Endpoints
+The documentation of the endpoints, for PancakeSwap v2, can be found [here](v2-documentation.md).
 
-All Thugswap pairs consist of two different tokens. BNB is not a native currency in Thugswap, and is represented
-only by WBNB in the pairs.
+## Development
 
-The canonical WBNB address used by the Thugswap interface is `0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c`.
+### Install requirements
 
-## [`/summary`](https://api.streetswap.vip/summary)
-
-Returns data for the top ~1000 Thugswap pairs, sorted by reserves.
-Results are edge cached for 15 minutes.
-
-### Request
-
-`GET https://api.streetswap.vip/summary`
-
-### Response
-
-```json5
-{
-  "0x..._0x...": {                  // the asset ids of the BEP20 tokens (i.e. token addresses), joined by an underscore
-    "last_price": "1.234",          // denominated in token0/token1
-    "base_volume": "123.456",       // last 24h volume denominated in token0
-    "quote_volume": "1234.56"       // last 24h volume denominated in token1
-    "pair_liquidity": "1234.56"     // Pair liquidity in USD
-  },
-  // ...
-}
+```shell
+yarn global add vercel
 ```
 
-## [`/totalliquidity`](https://api.streetswap.vip/totalliquidity)
+### Build
 
-Returns the total liquidity in USD value on Thugswap.
-Results are edge cached for 24 hours.
+```shell
+# Install dependencies
+yarn
 
-### Request
-
-`GET https://api.streetswap.vip/totalliquidity`
-
-### Response
-
-```json5
-{
-  "result": {
-    "totalLiquidityUSD": "...", // Total liquidity in USD
-  }
-}
+# Build project
+vercel dev
 ```
 
-## [`/assets`](https://api.streetswap.vip/assets)
+Endpoints are based on filename inside the `api/` folder.
 
-Returns the tokens in the top ~1000 pairs on Thugswap, sorted by reserves.
-Results are edge cached for 24 hours.
+```shell
+# api/pairs.ts
+curl -X GET 'localhost:3000/api/pairs'
 
-### Request
-
-`GET https://api.streetswap.vip/assets`
-
-### Response
-
-```json5
-{
-  // ...,
-  "0x...": {              // the address of the BEP20 token
-    "name": "...",        // not necesssarily included for BEP20 tokens
-    "symbol": "...",      // not necesssarily included for BEP20 tokens
-    "id": "0x...",        // the address of the BEP20 token
-    "maker_fee": "0",     // always 0
-    "taker_fee": "0.004", // always 0.004 i.e. .4%
-  },
-  // ...
-}
+# ...
 ```
 
-## [`/tickers`](https://api.streetswap.vip/tickers)
+## Production
 
-Returns data for the top ~1000 Thugswap pairs, sorted by reserves.
-Results are edge cached for 1 minute.
+### Deploy
 
-### Request
+Deployments to production are triggered by a webhook when a commit, or a pull-request is merged to `master`.
 
-`GET https://api.streetswap.vip/tickers`
+If you need to force a deployment, use the following command:
 
-### Response
-
-```json5
-{
-  "0x..._0x...": {                    // the asset ids of BNB and BEP20 tokens, joined by an underscore
-    "base_name": "...",             // token0 name
-    "base_symbol": "...",           // token0 symbol
-    "base_id": "0x...",             // token0 address
-    "quote_name": "...",            // token1 name
-    "quote_symbol": "...",          // token1 symbol
-    "quote_id": "0x...",            // token1 address
-    "last_price": "1.234",          // the mid price as token1/token0
-    "base_volume": "123.456",       // denominated in token0
-    "quote_volume": "1234.56"       // denominated in token1
-  },
-  // ...
-}
+```shell
+vercel --prod
 ```
-
-## `/orderbook/:pair`
-
-Returns simulated orderbook data for the given Thugswap pair.
-Since Thugswap has a continuous orderbook, fixed amounts in an interval are chosen for bids and asks,
-and prices are derived from the Thugswap formula (accounting for both slippage and fees paid to LPs).
-Results are edge cached for 15 minutes.
-
-### Request
-
-`GET https://api.streetswap.vip/orderbook/:pair`
-
-### URL Parameters
-
-- `pair`: The asset ids of two BEP20 tokens, joined by an underscore, e.g. `0x..._0x...`. The first token address is considered the base in the response.
-
-### Response
-
-```json5
-{
-  "timestamp": 1234567, // UNIX timestamp of the response
-  "bids": [
-    ["12", "1.2"],      // denominated in base token, quote token/base token
-    ["12", "1.1"],      // denominated in base token, quote token/base token
-    // ...
-  ],
-  "asks": [
-    ["12", "1.3"],      // denominated in base token, quote token/base token
-    ["12", "1.4"],      // denominated in base token, quote token/base token
-    // ...
-  ]
-}
-```
-
-## `/trades/:pair`
-
-Returns all swaps in the last 24 hours for the given Thugswap pair.
-Results are edge cached for 15 minutes.
-
-The pair address is the address of the two tokens in either order.
-The first address is considered the base in the response.
-
-Note because Thugswap supports flash swaps and borrowing of both tokens in a pair, you may wish to exclude these
-trade types (types `"???"` and `"borrow-both"`).
-
-### URL Parameters
-
-- `pair`: The asset ids of two BEP20 tokens, joined by an underscore, e.g. `0x..._0x...`. The first token address is considered the base in the response.
-
-### Request
-
-`GET https://api.streetswap.vip/trades/:pair`
-
-### Response
-
-```json5
-[
-  {
-    "trade_id": "...",
-    "price": "1.234",           // denominated in quote token/base token
-    "base_volume": "123.456",   // denominated in base token
-    "quote_volume": "1234.56",  // denominated in quote token
-    "trade_timestamp": 1234567, // UNIX timestamp
-    "type": "buy"               // "buy"/"sell"/"borrow-both"/"???"
-  },
-  // ...
-]
-```
-the end.

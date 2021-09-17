@@ -1,10 +1,10 @@
 {
-  "name": "BSCswap",
+  "name": "Binance Smart Chain Blocks",
   "schemaPath": "schema.graphql",
   "extensions": {
     "endpoints": {
-      "BSCswap": {
-        "url": "https://subgraph.bscswap.com/subgraphs/name/bscswap/bscswap-subgraph",
+      "Binance Smart Chain Blocks": {
+        "url": "https://api.thegraph.com/subgraphs/name/pancakeswap/blocks",
         "headers": {
           "user-agent": "JS GraphQL"
         },
