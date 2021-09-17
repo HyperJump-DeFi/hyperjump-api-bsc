@@ -1,7 +1,7 @@
 {
-  "name": "thugswap-api",
+  "name": "hyperjump-bsc-api",
   "version": 2,
-  "alias": "api.streetswap.vip",
+  "alias": "bsc-api.hyperjump.app",
   "builds": [{ "src": "src/**/*.ts", "use": "@now/node" }],
   "routes": [
     { "src": "/totalliquidity", "dest": "/src/totalliquidity.ts", "methods": ["GET"] },
