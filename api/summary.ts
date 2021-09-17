@@ -13,24 +13,30 @@ interface ReturnShape {
   };
 }
 
-export default async function (req: VercelRequest, res: VercelResponse): Promise<void> {
+export default async function (
+  req: VercelRequest,
+  res: VercelResponse
+): Promise<void> {
   try {
     const topPairs = await getTopPairs();
 
-    const pairs = topPairs.reduce<ReturnShape>((accumulator, pair): ReturnShape => {
-      const t0Id = getAddress(pair.token0.id);
-      const t1Id = getAddress(pair.token1.id);
+    const pairs = topPairs.reduce<ReturnShape>(
+      (accumulator, pair): ReturnShape => {
+        const t0Id = getAddress(pair.token0.id);
+        const t1Id = getAddress(pair.token1.id);
 
-      accumulator[`${t0Id}_${t1Id}`] = {
-        price: pair.price,
-        base_volume: pair.volumeToken0,
-        quote_volume: pair.volumeToken1,
-        liquidity: pair.reserveUSD,
-        liquidity_BNB: pair.reserveBNB,
-      };
+        accumulator[`${t0Id}_${t1Id}`] = {
+          price: pair.price,
+          base_volume: pair.volumeToken0,
+          quote_volume: pair.volumeToken1,
+          liquidity: pair.reserveUSD,
+          liquidity_BNB: pair.reserveBNB,
+        };
 
-      return accumulator;
-    }, {});
+        return accumulator;
+      },
+      {}
+    );
 
     return200(res, { updated_at: new Date().getTime(), data: pairs });
   } catch (error) {

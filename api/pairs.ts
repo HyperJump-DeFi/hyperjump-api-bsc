@@ -20,32 +20,38 @@ interface ReturnShape {
   };
 }
 
-export default async function (req: VercelRequest, res: VercelResponse): Promise<void> {
+export default async function (
+  req: VercelRequest,
+  res: VercelResponse
+): Promise<void> {
   try {
     const topPairs = await getTopPairs();
 
-    const pairs = topPairs.reduce<ReturnShape>((accumulator, pair): ReturnShape => {
-      const pId = getAddress(pair.id);
-      const t0Id = getAddress(pair.token0.id);
-      const t1Id = getAddress(pair.token1.id);
+    const pairs = topPairs.reduce<ReturnShape>(
+      (accumulator, pair): ReturnShape => {
+        const pId = getAddress(pair.id);
+        const t0Id = getAddress(pair.token0.id);
+        const t1Id = getAddress(pair.token1.id);
 
-      accumulator[`${t0Id}_${t1Id}`] = {
-        pair_address: pId,
-        base_name: pair.token0.name,
-        base_symbol: pair.token0.symbol,
-        base_address: t0Id,
-        quote_name: pair.token1.name,
-        quote_symbol: pair.token1.symbol,
-        quote_address: t1Id,
-        price: pair.price,
-        base_volume: pair.previous24hVolumeToken0,
-        quote_volume: pair.previous24hVolumeToken1,
-        liquidity: pair.reserveUSD,
-        liquidity_BNB: pair.reserveBNB,
-      };
+        accumulator[`${t0Id}_${t1Id}`] = {
+          pair_address: pId,
+          base_name: pair.token0.name,
+          base_symbol: pair.token0.symbol,
+          base_address: t0Id,
+          quote_name: pair.token1.name,
+          quote_symbol: pair.token1.symbol,
+          quote_address: t1Id,
+          price: pair.price,
+          base_volume: pair.previous24hVolumeToken0,
+          quote_volume: pair.previous24hVolumeToken1,
+          liquidity: pair.reserveUSD,
+          liquidity_BNB: pair.reserveBNB,
+        };
 
-      return accumulator;
-    }, {});
+        return accumulator;
+      },
+      {}
+    );
 
     return200(res, { updated_at: new Date().getTime(), data: pairs });
   } catch (error) {

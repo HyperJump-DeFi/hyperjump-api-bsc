@@ -1,7 +1,11 @@
 import BigNumber from "bignumber.js";
 import { BLACKLIST } from "./constants/blacklist";
 import { client } from "./apollo/client";
-import { TOP_PAIRS, PAIRS_VOLUME_QUERY, TOKEN_BY_ADDRESS } from "./apollo/queries";
+import {
+  TOP_PAIRS,
+  PAIRS_VOLUME_QUERY,
+  TOKEN_BY_ADDRESS,
+} from "./apollo/queries";
 import { getBlockFromTimestamp } from "./blocks/queries";
 import {
   PairsVolumeQuery,
@@ -106,11 +110,15 @@ export async function getTopPairs(): Promise<MappedDetailedPair[]> {
               : "0",
           previous24hVolumeToken0:
             pair.volumeToken0 && yesterday?.volumeToken0
-              ? new BigNumber(pair.volumeToken0).minus(yesterday.volumeToken0).toString()
+              ? new BigNumber(pair.volumeToken0)
+                  .minus(yesterday.volumeToken0)
+                  .toString()
               : new BigNumber(pair.volumeToken0).toString(),
           previous24hVolumeToken1:
             pair.volumeToken1 && yesterday?.volumeToken1
-              ? new BigNumber(pair.volumeToken1).minus(yesterday.volumeToken1).toString()
+              ? new BigNumber(pair.volumeToken1)
+                  .minus(yesterday.volumeToken1)
+                  .toString()
               : new BigNumber(pair.volumeToken1).toString(),
         };
       }

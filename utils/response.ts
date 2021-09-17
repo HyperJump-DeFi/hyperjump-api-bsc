@@ -5,7 +5,11 @@ export function return200(res: VercelResponse, body: any): VercelResponse {
   return res.status(200).json(body);
 }
 
-export function returnError(res: VercelResponse, code: number, message: string): VercelResponse {
+export function returnError(
+  res: VercelResponse,
+  code: number,
+  message: string
+): VercelResponse {
   return res.status(code).json({
     error: {
       code,
@@ -14,7 +18,10 @@ export function returnError(res: VercelResponse, code: number, message: string):
   });
 }
 
-export function return400(res: VercelResponse, message = "Bad request"): VercelResponse {
+export function return400(
+  res: VercelResponse,
+  message = "Bad request"
+): VercelResponse {
   return returnError(res, 400, message);
 }
 

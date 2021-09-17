@@ -2,7 +2,11 @@ import gql from "graphql-tag";
 
 export const PAIRS_VOLUME_QUERY = gql`
   query PairsVolume($limit: Int!, $pairIds: [ID!]!, $blockNumber: Int!) {
-    pairVolumes: pairs(first: $limit, where: { id_in: $pairIds }, block: { number: $blockNumber }) {
+    pairVolumes: pairs(
+      first: $limit
+      where: { id_in: $pairIds }
+      block: { number: $blockNumber }
+    ) {
       id
       volumeToken0
       volumeToken1
@@ -34,7 +38,10 @@ export const TOP_PAIRS = gql`
       first: $limit
       orderBy: reserveBNB
       orderDirection: desc
-      where: { token0_not_in: $excludeTokenIds, token1_not_in: $excludeTokenIds }
+      where: {
+        token0_not_in: $excludeTokenIds
+        token1_not_in: $excludeTokenIds
+      }
     ) {
       id
       token0 {
